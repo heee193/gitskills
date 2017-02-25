@@ -1,0 +1,297 @@
+常用命令：
+1 df -h 查看磁盘存储情况
+  uname -a / uname -r 查看当前内核版本 
+  who 查看所有现在的用户
+  netstat -a 查看网络连接状况
+  ps -aux 查看所有后台程序
+  pwd -p 显示当前目录
+
+3 安装字体
+	1.将要安装的字体放在一个文件夹下，以/home/UsrName/Download/Font为例
+
+	2.在终端中输入sudo cp -r /home/UsrName/Download/Font /usr/share/fonts/ 将字体文件夹全部复制到/usr/share/fonts/目录下
+
+	3.在终端中依次输入以下三条命令：
+	    sudo mkfontscale
+	    sudo mkfontdir
+	    sudo fc-cache -fv
+
+4  tar命令使用
+	-c: 建立压缩档案
+	-x：解压
+	-t：查看内容
+	-r：向压缩归档文件末尾追加文件
+	-u：更新原压缩包中的文件
+	这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。
+
+	下面的参数是根据需要在压缩或解压档案时可选的。
+	-z：有gzip属性的
+	-j：有bz2属性的
+	-Z：有compress属性的
+	-v：显示所有过程
+	-O：将文件解开到标准输出
+
+	参数-f是必须的
+	-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。
+
+	# tar -cf all.tar *.jpg 		 这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包，-f指定包的文件名。
+	# tar -rf all.tar *.gif 
+	    这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。 
+	# tar -uf all.tar logo.gif 
+		这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。 
+	# tar -tf all.tar 
+		这条命令是列出all.tar包中所有文件，-t是列出文件的意思 
+	# tar -xf all.tar 
+		这条命令是解出all.tar包中所有文件，-x是解开的意思
+
+	查看
+	tar -tf aaa.tar.gz   在不解压的情况下查看压缩包的内容
+
+	压缩
+
+	tar –cvf jpg.tar *.jpg //将目录里所有jpg文件打包成tar.jpg
+	tar –czf jpg.tar.gz *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz
+	tar –cjf jpg.tar.bz2 *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2
+	tar –cZf jpg.tar.Z *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z
+
+	解压
+	tar –xvf file.tar //解压 tar包
+	tar -xzvf file.tar.gz //解压tar.gz
+	tar -xjvf file.tar.bz2   //解压 tar.bz2tar –xZvf file.tar.Z //解压tar.Z
+
+	总结
+	1、*.tar 用 tar –xvf 解压
+	2、*.gz 用 gzip -d或者gunzip 解压
+	3、*.tar.gz和*.tgz 用 tar –xzf 解压
+	4、*.bz2 用 bzip2 -d或者用bunzip2 解压
+	5、*.tar.bz2用tar –xjf 解压
+	6、*.Z 用 uncompress 解压
+	7、*.tar.Z 用tar –xZf 解压
+
+5 配置jdk
+	1、解压后得到名字为jdk1.7.0_21的文件夹，将其复制到 /usr/lib/jvm下（需要新建jvm文件夹）。
+	
+	2、配置jdk环境变量：
+		在启动终端并输入 gedit /etc/profile  
+		在末尾添加一下配置，保存并退出
+			export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_21  
+			export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH  
+			export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH  
+		终端输入一下命令使配置生效 source /etc/profile  
+		
+	3、查看配置是否成功。在终端输入 java -version  
+		如果显示版本是1.7.0.21则配置成功，如下显示：
+			java version "1.7.0_21"  
+			Java(TM) SE Runtime Environment (build 1.7.0_21-b11)  
+			Java HotSpot(TM) Server VM (build 23.21-b01, mixed mode)  
+	 
+	如果显示仍是openJDK，执行步骤5，再测试
+
+	4、配置默认JDK，ubuntu下默认JDK是openJDK。。终端输入
+		sudo update-alternatives --install /usr/lib/java java /usr/lib/jvm/jdk1.7.0_17/bin/java 300  
+		sudo update-alternatives --install /usr/lib/javac javac /usr/lib/jvm/jdk1.7.0_17/bin/javac 300 
+		
+	5、执行下面命令，配置需要默认的JDK sudo update-alternatives --config java  
+	7、会列出jdk版本，其中被“*”标注的为默认JDK。如果要维持当前默认JDK，直接按回车键即可；否则输入相应JDK的编号将其设置为默认版本。
+
+
+6 设置编码格式
+	1、终端输入命令 sudo gedit /var/lib/locales/supported.d/local
+		可以看到如下内容：
+			zh_CN.UTF-8 UTF-8
+			en_US.UTF-8 UTF-8
+		在文件尾添加中文字符集
+			zh_CN.GBK GBK
+			zh_CN.GB2312 GB2312
+	2、保存后退出，输入命令 sudo dpkg-reconfigure locales
+
+7 Ubuntu利用Samba映射磁盘到Win7
+	1 首先在Ubuntu安装好samba
+		安装samba：sudo apt-get install samba
+	    安装smbclient：sudo apt-get install
+	    安装smbfs：sudo apt-get smbfs
+
+	2 修改配置文件
+		将;security user修改为 security user，然后在配置文件末尾添加
+	
+		[ShareFiles]
+		comment = Shared Folder require password
+		path = /home/magic/share
+		public = yes  www.2cto.com  
+		writable = yes
+		valid users = magic
+		create mask = 0777
+		directory mask = 0777
+		force user = nobody
+		force group = nogroup
+		available = yes
+		browseable = yes
+	
+		保存后重新启动samba，sudo /etc/init.d/samba restart
+
+	3 设置用户和密码
+     	sudo smbpasswd -a magic 接着按提示输入密码。
+	 
+	4 最后windows下网上邻居->右键->映射网络驱动器
+	    输入 文件夹框 \\ip地址\ShareFiles,按提示输入用户名密码即可
+		
+		
+8 ubuntu建立软链接方法
+	ln -s 源地址  目的地 （用绝对地址）
+		eg ：   ln -s source dist        # 建立软连接
+				ln source dist            # 建立硬连接
+	
+	ln [options] source dist，其中 option 的格式为：
+		-f : 链结时先将与 dist 同档名的档案删除
+	　　-d : 允许系统管理者硬链结自己的目录
+	　　-i : 在删除与 dist 同档名的档案时先进行询问
+	　　-n : 在进行软连结时，将 dist 视为一般的档案
+	　　-s : 进行软链结(symbolic link)
+	　　-v : 在连结之前显示其档名
+	　　-b : 将在链结时会被覆写或删除的档案进行备份
+	　　-S SUFFIX : 将备份的档案都加上 SUFFIX 的字尾
+	　　-V METHOD : 指定备份的方式
+	　　--help : 显示辅助说明
+	　　--version : 显示版本 
+
+	删除符号链接，有创建就有删除
+		rm -rf   symbolic_name   注意不是rm -rf   symbolic_name/ 
+		
+		
+9 Ubuntu安装软件的三种方法
+	1、apt-get
+		使用apt-get install来安装应用程序算是最常见的一种安装方法了，比如我要安装build-essential这个软件，使用以下，他会帮我把所有的依赖包都一起安装了
+		apt-get install xxx 安装xxx  。如果带有参数，那么-d 表示仅下载 ，-f 表示强制安装  
+		apt-get remove xxx 卸载xxx  
+		apt-get update 更新软件信息数据库  
+		apt-get upgrade 进行系统升级  
+		apt-cache search 搜索软件包  
+	2、dpkg安装deb包
+		Ubuntu软件包格式为deb，安装方法如下：    
+		sudo  dpkg  -i  package.deb
+			dpkg -r package	删除包
+			dpkg -P package	删除包（包括配置文件）
+			dpkg -L package	列出与该包关联的文件
+			dpkg -l package	显示该包的版本
+			dpkg –unpack package.deb	解开 deb 包的内容
+			dpkg -S keyword	搜索所属的包内容
+			dpkg -l	列出当前已安装的包
+			dpkg -c package.deb	列出 deb 包的内容
+			dpkg –configure package	配置包
+	3、make install源代码安装，大致可以分为三步骤：（./configure）–＞ 编译（sudo make） –＞ 安装（sudo make install）
+		a、配置：这是编译源代码的第一步，通过 ./configure 命令完成。执行此步以便为编译源代码作准备。
+			     常用的选项有--prefix=PREFIX，用以指定程序的安装位置。更多的选项可通过 --help 查询。也有某些程序无需执行此步。
+		b、编译：一旦配置通过，可即刻使用 make 指令来执行源代码的编译过程。视软件的具体情况而定，编译所需的时间也各有差异，我们所要做的就是耐心等候和静观其变。
+		c、安装：如果编译没有问题，那么执行 sudo make install 就可以将程序安装到系统中了。
+		
+		eg：
+			tar -zxf nagios-4.0.2.tar.gz  
+			//2.进入目录
+			cd nagios-4.0.2
+			//3.配置
+			./configure --prefix=/usr/local/nagios     
+			//4.编译
+			make all
+			//5.安装
+			make install && make install-init && make install-commandmode && make install-config
+
+10 Ubuntu文件夹共享
+	1、在Dash中打开桌面共享，设置密码等；
+	2、sudo apt-get install dconf-editor，安装dconf-editor
+	   dconf-editor，打开dconf-editor，依次展开org->gnome->desktop->remote-access，将require-encryption选项去掉
+	3、在windows上可以用Vncviewer访问。
+
+11 Ubuntu安装Samba
+
+	1、在新装的ubuntu16.04下安装samba，安装好samba后备份下配置文件:
+		zhuben@zb:~$ sudo apt-get install samba
+		zhuben@zb:~$ cd /etc/samba
+		zhuben@zb:/etc/samba$ sudo cp smb.conf smb.conf.bk
+		zhuben@zb:/etc/samba$ sudo vi smb.conf
+
+	例如：我要将我的/var/www/html文件夹设为共享
+	2、如果是想设置一个无需验证的任何人都可以访问的共享文件夹
+		
+		那么只需要在配置文件的最后面加上：
+		[share]
+		comment=samba    ##这个是说明，随意填
+		path=/var/www/html
+		public=yes
+		create mask=0775
+		directory mask=0775
+
+		##要能修改文件夹，要么就将/var/www/html权限设置为777，或者加上如下设置
+		forceuser=root
+		forcegroup=root
+
+		保存后重启samba:zhuben@zb:/etc/samba$ sudo /etc/init.d/sambd restart
+
+		windows下打开开始-->运行-->输入\[ip address]\share
+		
+	3、如果是想设置一个需要账号登陆才能访问的共享文件夹
+
+		a、你需要一个系统用户（新建或者已存在）,例如新建一个系统用户usamba:
+			zhuben@zb:~$sudo adduser usamba
+
+		b、建好后，将此用户添加到samba用户
+
+			zhuben@zb:~$sudo smbpasswd -a usamba
+			zhuben@zb:~$sudo smbpasswd -e usamba
+
+		c、配置smb.conf文件，在最后加上
+
+			[user]
+			comment=samba
+			path=/var/www/html
+			public=no
+			valid users=usamba
+			create mask=0775
+			directory mask=0775
+
+		windows下打开开始-->运行-->输入\[ip address]\user-->输入账号密码
+
+	如果此时你尝试修改或者添加文件，提示没有权限的话：
+	原因：与你需要共享的文件夹的访问权限和你新建的samba用户的所拥有的访问权限相关。
+	比如说，我的/var/www/html的所属用户是root，所属用户组是root，权限是755。而我新建的系统用户usamba的所属的用户组是usamba，所以usamba用户是只能访问而不能修改。
+	这就是一个访问权限的问题，要让usamba用权限能修改，添加。这里就可以用很多种方法了。
+		
+		我的办法是修改usamba的用户组和/var/www/html的用户组：
+		zhuben@zb:~$sudo usermod -G zhuben usamba
+		zhuben@zb:~$sudo chgrp -R zhuben /var/www/html
+
+11 Ubuntu创建用户
+	创建用户时，需要为新建用户指定一用户组，如果不指定其用户所属的工作组，会自动生成一个与用户名同名的工作组，用户的缺省uid从500向后顺序增加，500以下作为系统保留账户。
+
+	1、用户组
+
+		a、创建用户组，命令groupadd创建用户组
+
+		groupadd -g 600 groupftp，创建一个组groupftp，其GID为600
+
+		b、为组添加用户，命令gpasswd，只有root和组管理员能够改变组的成员。
+
+		gpasswd -a user1 groupftp，把user1加入groupftp组
+		gpasswd -d user1 groupftp，把user1退出groupftp组3、修改组
+		groupmod -n user groupftp，修改组名user为groupftp4、删除组
+		groupdel groupftp，删除组groupftp二、用户操作
+
+	2、创建用户
+
+		useradd -u 700 myftp -g 600，创建myftp用户，指定uid为700，所属组uid600
+
+	3、为新建用户设置密码
+
+		passwd myftp7、修改用户账户
+
+		usermod -l myftp2 myftp，将用户myftp的登录名改为myftp2
+		usermod -g groupftp myftp，将用户myftp加入到groupftp组中
+		usermod -d /ftp1/ftp2 ftp，将用户ftp目录改为/ftp1/ftp28、删除用户账户
+
+	4、userdel myftp，删除用户myftp
+
+		userdel -r myftp
+		删除用户myftp，同时删除他的工作目录9、查看用户信息
+
+	5、id命令查看一个用户的UID和GID, 例：查看myftp的id
+
+		id myftpfinger 命令查看用户信息finger myftp
